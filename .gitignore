@@ -1,0 +1,8 @@
+*.sed
+*.bat
+*.gz
+*.exe
+.DS_Store
+*.jar
+*.zip
+*.rb

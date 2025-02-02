@@ -1,0 +1,169 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * @fileOverview Handcrafted minimal shaders.
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * Very simple shaders as strings. Catenate these in front of your
+<span class='line'>  5</span>  * WebGL code, use what you need, and minimize the result using
+<span class='line'>  6</span>  * Closure. Non-used shader versions will vanish from final output.
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * The strategy is, of course, to select the smallest shader that
+<span class='line'>  9</span>  * suffices for what you want to do. If you have time to tinker, you
+<span class='line'> 10</span>  * can always remove or simplify features from these, as well, if you
+<span class='line'> 11</span>  * run out of space for artwork :).
+<span class='line'> 12</span>  */</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span> </span><span class="COMM">/** A very basic vertex shader: Just interpolate color (g) and
+<span class='line'> 15</span>  * position (v) projected by perspective (p) and modelview (mv)
+<span class='line'> 16</span>  * transforms. We transform normals (N) by the modelview (not its
+<span class='line'> 17</span>  * inverse transpose) so free scale / skew cannot be done with
+<span class='line'> 18</span>  * correct normals. Orthonormal transformations should be OK.
+<span class='line'> 19</span>  */</span><span class="WHIT">
+<span class='line'> 20</span> 
+<span class='line'> 21</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vertex_shader_basic</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">        </span><span class="COMM">//"precision mediump float;"+ //Vertex shader has default prec.</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">        </span><span class="STRN">"uniform mat4 mv,p;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">        </span><span class="STRN">"attribute vec4 g,v,N;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">        </span><span class="STRN">"varying vec4 c,n,r;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">        </span><span class="STRN">"void main(){"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">            </span><span class="STRN">"gl_Position=p*mv*v;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">            </span><span class="STRN">"n=mv*N;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">     </span><span class="COMM">// Normal (assuming mv is orthonormal)</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">            </span><span class="STRN">"c=g;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">        </span><span class="COMM">// "Color" (whatever in the fragment shader)</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">            </span><span class="STRN">"r=-mv*v;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">    </span><span class="COMM">// View diRection</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">        </span><span class="STRN">"}"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> </span><span class="COMM">/** A vertex shader that uses normal matrix. It should be a 4x4 matrix
+<span class='line'> 34</span>  * whose upper left 3x3 part contains the inverse transpose of
+<span class='line'> 35</span>  * modelview. Otherwise as simple as the previous one. This allows
+<span class='line'> 36</span>  * free scale/skew of geometries with the expense of requiring you to
+<span class='line'> 37</span>  * compute and transfer the normal matrix. It is some heavy code, so
+<span class='line'> 38</span>  * you should really go and scale your sH* to make it look awesome, if
+<span class='line'> 39</span>  * you decide to compute inverses.
+<span class='line'> 40</span>  */</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">vertex_shader_minimal_with_normalmatrix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">        </span><span class="COMM">//"precision mediump float;"+ //Vertex shader has default prec.</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">        </span><span class="STRN">"uniform mat4 mv,nm,p;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">        </span><span class="STRN">"attribute vec4 g,v,N;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">        </span><span class="STRN">"varying vec4 c,n,r;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">        </span><span class="STRN">"void main(){"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">            </span><span class="STRN">"gl_Position=p*mv*v;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">            </span><span class="STRN">"n=nm*N;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">     </span><span class="COMM">// Normal</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">            </span><span class="STRN">"c=g;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">        </span><span class="COMM">// "Color" (whatever in the fragment shader)</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">            </span><span class="STRN">"r=-mv*v;"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">    </span><span class="COMM">// View diRection</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">        </span><span class="STRN">"}"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> 
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="COMM">// Fragment shader: Only one unidirectional light is used.</span><span class="WHIT">
+<span class='line'> 55</span> 
+<span class='line'> 56</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fragment_shader_camspace_directed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">        </span><span class="COMM">//"precision mediump float;"+ // one-by-one definitions are shorter</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">        </span><span class="COMM">// Inputs:</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">        </span><span class="COMM">// a: ambient color  - now coming in as i[0]</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">        </span><span class="COMM">// d: diffuse color  - now coming in as i[1]</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">        </span><span class="COMM">// s: specular color - now coming in as i[2]</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">        </span><span class="COMM">// q: additional params [shininess, "par2", mesh_brightn]</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">        </span><span class="COMM">//     - now coming in as i[3]</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">        </span><span class="COMM">// l: light direction in camera space, pre-normalized</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">        </span><span class="COMM">// r: view direction, assume already normalized</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">        </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">        </span><span class="COMM">// u: [time, window w, window h] - not used in this production</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp mat4 i;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp vec4 l;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">        </span><span class="STRN">'varying highp vec4 c,n,r;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">        </span><span class="STRN">'void main(){'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">            </span><span class="COMM">// win 10 bytes in packed space by re-normalizing n twice.</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">            </span><span class="COMM">// As always, time we can spend, but space not so much.</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">    	    </span><span class="STRN">'gl_FragColor='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">                 </span><span class="COMM">// Locate triangle boundaries from "vertex coloring":</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">                </span><span class="STRN">'i[3].bbbb*max(0.,1.-4.*min(c.b,min(c.g,c.r)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">                 </span><span class="COMM">// Clamp output at ambient color (incl. alpha):</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">                </span><span class="STRN">'+max(i[0],'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">                     </span><span class="COMM">// Diffuse reflection</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">                     </span><span class="STRN">'i[1]*max(0.,dot(normalize(l),normalize(n)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">                     </span><span class="COMM">// Specular reflection</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">                     </span><span class="STRN">'+i[2]*pow(max(0.,dot(normalize(r),'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">                                          </span><span class="STRN">'reflect(-normalize(l),normalize(n))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">                                  </span><span class="STRN">')),'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">                               </span><span class="STRN">'i[3].r'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">                               </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">                     </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">	            </span><span class="STRN">';'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">        </span><span class="STRN">'}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 90</span> 
+<span class='line'> 91</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fragment_shader_camspace_directed_with_white_fog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">        </span><span class="COMM">//"precision mediump float;"+ // one-by-one definitions are shorter</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">        </span><span class="COMM">// Inputs:</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">        </span><span class="COMM">// a: ambient color  - now coming in as i[0]</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">        </span><span class="COMM">// d: diffuse color  - now coming in as i[1]</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">        </span><span class="COMM">// s: specular color - now coming in as i[2]</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">        </span><span class="COMM">// q: additional params [shininess, "par2", mesh_brightn]</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="COMM">//     - now coming in as i[3]</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">        </span><span class="COMM">// l: light direction in camera space, pre-normalized</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="COMM">// r: view direction, assume already normalized</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">        </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">        </span><span class="COMM">// u: [time, window w, window h] - not used in this production</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp mat4 i;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp vec4 l;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">        </span><span class="STRN">'varying highp vec4 c,n,r;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">        </span><span class="STRN">'void main(){'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">            </span><span class="COMM">// win 10 bytes in packed space by re-normalizing n twice.</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">            </span><span class="COMM">// As always, time we can spend, but space not so much.</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">    	    </span><span class="STRN">'gl_FragColor= vec4(1.-clamp(exp(-.02*r.z), 0., 1.))+'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">                 </span><span class="COMM">// Locate triangle boundaries from "vertex coloring":</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">                </span><span class="STRN">'i[3].bbbb*max(0.,1.-4.*min(c.b,min(c.g,c.r)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">                 </span><span class="COMM">// Clamp output at ambient color (incl. alpha):</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">                </span><span class="STRN">'+max(i[0],'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">                     </span><span class="COMM">// Diffuse reflection</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">                     </span><span class="STRN">'i[1]*max(0.,dot(normalize(l),normalize(n)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">                     </span><span class="COMM">// Specular reflection</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">                     </span><span class="STRN">'+i[2]*pow(max(0.,dot(normalize(r),'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">                                          </span><span class="STRN">'reflect(-normalize(l),normalize(n))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">                                  </span><span class="STRN">')),'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">                               </span><span class="STRN">'i[3].r'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">                               </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">                     </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">	            </span><span class="STRN">';'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">        </span><span class="STRN">'}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>125</span> 
+<span class='line'>126</span> 
+<span class='line'>127</span> </span><span class="COMM">/** Phong model with one point light given in camera space. */</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fragment_shader_pointlight_cameraspace</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">        </span><span class="COMM">//"precision mediump float;"+ // one-by-one definitions are shorter</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">        </span><span class="COMM">// Inputs:</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">        </span><span class="COMM">// a: ambient color  - now coming in as i[0]</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">        </span><span class="COMM">// d: diffuse color  - now coming in as i[1]</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">        </span><span class="COMM">// s: specular color - now coming in as i[2]</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">        </span><span class="COMM">// q: additional params [shininess, "par2", mesh_brightn]</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">        </span><span class="COMM">//     - now coming in as i[3]</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">        </span><span class="COMM">// l: point light position in camera space</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">        </span><span class="COMM">// r: view direction, assume already normalized</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">        </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">        </span><span class="COMM">// u: [time, window w, window h] - not used in this production</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp mat4 i;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">        </span><span class="STRN">'uniform highp vec4 l;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">	    </span><span class="STRN">'varying highp vec4 c,n,r;'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">        </span><span class="STRN">'void main(){'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">            </span><span class="COMM">// win 10 bytes in packed space by re-normalizing n twice.</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">            </span><span class="COMM">// As always, time we can spend, but space not so much.</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">    	    </span><span class="STRN">'gl_FragColor='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">                 </span><span class="COMM">// Locate triangle boundaries from "vertex coloring":</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">                </span><span class="STRN">'i[3].bbbb*max(0.,1.-4.*min(c.b,min(c.g,c.r)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">                 </span><span class="COMM">// Clamp output at ambient color (incl. alpha):</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">                </span><span class="STRN">'+max(i[0],'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">                     </span><span class="COMM">// Diffuse reflection</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">                     </span><span class="STRN">'i[1]*max(0.,dot(normalize(l),normalize(n)))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">                     </span><span class="COMM">// Specular reflection</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">                     </span><span class="STRN">'+i[2]*pow(max(0.,dot(normalize(r),'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">                                          </span><span class="STRN">'reflect(-l,normalize(n))'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">                                  </span><span class="STRN">')),'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">                               </span><span class="STRN">'i[3].r'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">                               </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">                     </span><span class="STRN">')'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">	            </span><span class="STRN">';'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">        </span><span class="STRN">'}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span> </span></pre></body></html>

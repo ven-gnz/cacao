@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		
+		<title>JsDoc Reference - File Index</title>
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<style type="text/css">
+		/* default.css */
+body
+{
+	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	width: 800px;
+}
+
+.header
+{
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+
+h1
+{
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr
+{
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+pre.code
+{
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+}
+
+#index
+{
+	margin-top: 24px;
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content
+{
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li
+{
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+
+h1.classTitle
+{
+	font-size:170%;
+	line-height:130%;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size:130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription, .description
+{
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+
+.detailList .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint
+{
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
+	</head>
+	
+	<body>
+		<div id="header">
+</div>
+		
+		<div id="index">
+			<div align="center"><a href="index.html">Class Index</a>
+| <a href="files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="symbols/_global_.html">_global_</a></i></li>
+	
+</ul>
+<hr />
+		</div>
+		
+		<div id="content">
+			<h1 class="classTitle">File Index</h1>
+			
+			
+			<div>
+				<h2><a href="symbols/src/lib_curve_presets.js.html">curve_presets.js</a></h2>
+				
+In this file, maybe...
+There could be like a "library of nice preset curves"
+Hmm.. why not also parametric shapes as functions?
+(This is just a placeholder for such things, as of yet..)
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			<div>
+				<h2><a href="symbols/src/lib_glconstants.js.html">glconstants.js</a></h2>
+				
+GL constants with "gl_" prepended.
+
+The rumors say that these have not changed much between WebGL
+versions :). The rumors say that the following dirty trick is used
+often in demoscene intro minification. Me too, me too!
+
+Usage, by an example: transform "gl.ALPHA_BITS" to "gl_ALPHA_BITS"
+in the actual source (I have a sed script for that). Insert this
+file before the actual GL code before feeding the resulting bulk to
+the Closure compiler.
+
+Result: Closure automatically outputs "3413" instead of
+gl.ALPHA_BITS, which is 9 bytes shorter even before
+compression. Supposedly, and seemingly, the numeric constants work
+accross current WebGL implementations...
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			<div>
+				<h2><a href="symbols/src/lib_library.js.html">library.js</a></h2>
+				
+Let's Make a Demo Workshop 1.x base library
+
+<h3>A Dirty Small Library for Graphics</h3>
+
+<p>This was, and basically still is, course material for our course
+"TIEA311 Principles of Computer graphics" (based on "6.837 Computer
+Graphics" as published in MIT OCW). Am I a rogue teacher leaking
+example answers here? No. I'm quite certain that a student who
+manages to translate this convoluted Javascript snippet to
+grade-worthy C++ exercise answers has earned the credit, probably
+the "hard way", too.
+</p>
+
+<p>This code does dirty tricks to fit in very small storage space as
+if it was part of an entry in a demoscene "4k intro"
+competition. That means at most 4096 bytes for everything. Also,
+this is written by a total Javascript newbie - proper practices of
+any language can only be learned by lots and lots of programming
+and reading codes by more experienced programmers. So far, I've
+only gone through some tutorial examples, parts of specifications,
+and demoscene intro codes that necessarily minimize code size with
+the expense of *everything* else.
+</p>
+
+<p>Do not try these programming practices at home (until you know what
+you do and which parts of the specification are beautifully
+misused).
+</p>
+
+<p>If you're less experienced, try to keep on learning good
+programming practices (in Javascript and other languages) from nice
+tutorials. Listen to your teachers and coaches. They know what is
+best for you. That said, some of this code may show you some
+features that are less common in basic tutorials.
+</p>
+
+<p>Browser support: Productions made using this code seem to load and
+run in desktop Chrome, Edge, and Firefox, but not on IE. Mobile
+browsers unknown.
+</p>
+
+<p>Original goal: use at least spline curves, generalized cylinder,
+surface of revolution, hierarchical model, perspective projection,
+and simple fragment shading with directed light. (some 50% of
+course content)
+</p>
+
+<p>Outcome: yep, I got all that stuffed in an example production
+(along with shaders, vector math, softsynth, soundtrack, and an
+English message.. all in 4k "executable" after some serious
+minification).
+</p>
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			<div>
+				<h2><a href="symbols/src/lib_main.js.html">main.js</a></h2>
+				
+Main executable script; this should be appended to the very
+end of the executable code (preferrably using automatic tools).
+
+This uses variables defined in library.js which should be
+automatically added <strong>before</strong> the place where your
+own creative code goes.
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			<div>
+				<h2><a href="symbols/src/lib_shaders_simple.js.html">shaders_simple.js</a></h2>
+				
+Handcrafted minimal shaders.
+
+Very simple shaders as strings. Catenate these in front of your
+WebGL code, use what you need, and minimize the result using
+Closure. Non-used shader versions will vanish from final output.
+
+The strategy is, of course, to select the smallest shader that
+suffices for what you want to do. If you have time to tinker, you
+can always remove or simplify features from these, as well, if you
+run out of space for artwork :).
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			<div>
+				<h2><a href="symbols/src/lib_minified_shaders.js.html">lib/minified_shaders.js</a></h2>
+				
+				<dl>
+					
+					
+					
+					
+				</dl>
+			</div>
+			<hr />
+			
+			
+		</div>
+		<div class="fineprint" style="clear:both">
+			
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blankt">JsDoc Toolkit</a> 2.4.0 on Sun Feb 04 2024 23:32:43 GMT+0200 (EET)
+		</div>
+	</body>
+</html>
