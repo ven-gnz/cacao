@@ -2494,7 +2494,7 @@ function initAssets(){
  * would have been better than "t" etc. Do better than these examples..
  *
  */
-function snowman(t){
+function person(t){
 
     /**
      * Example of a scene graph node. If you have any experience with JSON,
@@ -2525,8 +2525,9 @@ function snowman(t){
      * The current library version uses property "r" for special uses, but it is
      * not mandatory, and will be explained later, on a need-to-know basis.
      */
-    var stuff = {
-        f: [],
+
+    var person = {
+        f : [],
         o: [],
         c: []
     };
@@ -2560,41 +2561,51 @@ function snowman(t){
 
     // We made an empty node called "stuff", but now we start using it as a container
     // of more stuff, and do this by pushing new nodes in its child list:
-    stuff.c.push({f: [translate_wi(0,1,0)],
-                  o: [new Material(clr), objBall],
-                  c: []
-                 });
+    // stuff.c.push({f: [translate_wi(0,1,0)],
+    //               o: [new Material(clr), objBall],
+    //               c: []
+    //              });
+
+    person.c.push({f : [translate_wi(0,1,0)],
+                  o : [new Material(clr), objBall],
+                  c : []});
+
+
+
 
     // You can use such pushing for example for pushing multiple nodes in a for-loop ...
 
     // Pushing one-by-one makes it possible to manage combining parts without getting
     // into kilometer-deep and wide JSON structures that make you sick and get out of hands.
 
-    stuff.c.push({f: [translate_wi(0,2,0), scale_wi(.7)],
-                  o: [new Material(clr), objBall],
-                  c: [
-                      {f: [rotY_wi(.2), rotZ_wi(.4*Math.sin(.8*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
-                       o: [objBall],
-                       c: []},
-                      {f: [rotY_wi(-.2), rotX_wi(.4*Math.sin(.06*t)),rotZ_wi(3.14-.4*Math.sin(.1*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
-                       o: [objBall],
-                       c: []}
-                     ]
-                 });
+    // stuff.c.push({f: [translate_wi(0,0,0), scale_wi(.7)],
+    //               o: [new Material(clr), objBall],
+    //                     // right hand
+    //               c: [
+    //                   {f: [rotY_wi(.2), rotZ_wi(.4*Math.sin(.8*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
+    //                    o: [objBall],
+    //                    c: []},
+    //                   {f: [rotY_wi(-.2), rotX_wi(.4*Math.sin(.06*t)),rotZ_wi(3.14-.4*Math.sin(.1*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
+    //                    o: [objBall],
+    //                    c: []}
+    //                  ]
+    //              });
     
-    stuff.c.push({f: [translate_wi(0,3,0), scale_wi(.4), rotX_wi(-.3)],
-                  o: [new Material(clr), objBall],
-                  c: [{f: [translate_wi(0,.5,0), scaleXYZ_wi(1.5,.2,1.5)],
-                       o: [new Material(black), objBall],
-                       c: []
-                      },
-                      {f: [translate_wi(0,.2,0), scaleXYZ_wi(.9,1,.9)],
-                       o: [new Material(black), objBall],
-                       c: []
-                      }
-                     ]
-                 });
-    return stuff;
+    // stuff.c.push({f: [translate_wi(0,3,0), scale_wi(.4), rotX_wi(-.3)],
+    //               o: [new Material(clr), objBall],
+    //               c: [{f: [translate_wi(0,.5,0), scaleXYZ_wi(1.5,.2,1.5)],
+    //                    o: [new Material(black), objBall],
+    //                    c: []
+    //                   },
+    //                   {f: [translate_wi(0,.2,0), scaleXYZ_wi(.9,1,.9)],
+    //                    o: [new Material(black), objBall],
+    //                    c: []
+    //                   }
+    //                  ]
+    //              });
+
+
+    return person;
 }
 
 /** 
@@ -2629,29 +2640,15 @@ function buildSceneAtTime(t){
     var sceneroot = {f:[],o:[],c:[]};
 
     // Build animated contents step by step, in subgraphs
-    var player_one = snowman(2*t);
-    var parivaljakko = {f:[],o:[],c:[
-        {f:[translate_wi(0,-2,0),  rotY_wi(Math.sin(30))],  o:[], c:[player_one]}
+    var person_one = person(2*t);
+    var personnel = {f:[],o:[],c:[
+        {f:[],  o:[], c:[person_one]}
     ]}
-
-    // Generating colors can be put into functions just like anything - for convenience and brevity
-    var cpohja = basic_color(.9, .6, .4);
 
     // Colors can be animated, as can anything. Use "t" for sync and innovate...
     // Names can be given to any nuts or bolts, to help you animate and manage your scene:
-    var parivaljakon_sijainti = [translate_wi(0,-2,0)];
+    var personnel_location = [translate_wi(0,-15,0)];
 
-    var ctausta=
-        [.1, .1, .2, 1,
-         .3, .3,  1, 1,
-         .1, .1, .1, 2,
-          0,  0,  0, 0 ];
-
-    var tausta = {
-        f:[],
-        o:[new Material(ctausta), objBackground],
-        c:[]
-    };
 
     // At times, surplus complexity tends to appear, and it could be refactored away.
     // For example, the following code pushes a useless node with children that could have
@@ -2662,21 +2659,12 @@ function buildSceneAtTime(t){
     sceneroot.c.push({f:[],
                       o:[],
                       c:[
-                              {f:[translate_wi(0,-3,0), scaleXYZ_wi(60,.2,60)],
-                               o:[new Material(cpohja), objTile],
-                               c:[]},
-
-                              {f:parivaljakon_sijainti,
+                              {f:personnel_location,
                                o:[],
-                               c:[parivaljakko]},
-
-                              {f:[scaleXYZ_wi(3,3,3)],
-                               o:[],
-                               c:[tausta]
-                              },
+                               c:[personnel]},
                                 
                               // The scene must have exactly one Camera. It doesn't work without.
-                              {f:[translate_wi(0,0,0), rotY_wi(0), translate_wi(0,0,30), rotX_wi(.2)],
+                              {f:[translate_wi(0,0,0), rotY_wi(0), translate_wi(0,0,45), rotX_wi(.2)],
                                o:[],
                                c:[],
                                r:[new Camera()]
