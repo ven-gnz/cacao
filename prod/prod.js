@@ -1,40 +1,6 @@
 /* -*- mode: javascript; tab-width: 4; indent-tabs-mode: nil; -*- */
 
-/**
- * @fileOverview This file "prod.js" is the graphical content of the intro.
- *
- * This initial example belongs to the starter package of "Let's make a demo
- * 1.x" party coding workshop. During 3 x 4 tutored hours and your own effort
- * between them, this file eventually becomes your own artistic production.
- * Additionally, you will replace song.js with your own music exported from
- * SoundBox as JavaScript, write your own README.txt and set up a few names in
- * Settings.mk.
- *
- * How to start:
- *
- * 1. Make a complete copy of the whole "example0" directory and rename it
- *    according to your planned concept or just "PaulsFirstIntro" or whatever
- *
- * 2. If you happen to know what it means, do your favorite flavor of 'git init;
- *    git add *.js *.txt *.mk Makefile; git commit -m "Start from the example"' 
- *
- *    If you don't know what it means, skip that one.
- *
- * 3. Make sure that you can build and preview the example without problems.
- *
- * 4. Explore and try to learn how the example works.
- *
- * 5. Gradually, piece by piece, make it your own. Ask help from a workshop
- *    tutor. I recommend starting from very small changes to the example that
- *    help your understanding - how you change a color, how you change a
- *    location, how you change a rotation, how you sync something with the song
- *    time, ...
- *
- * 6. At some point, when comfortable, you can let go of these how-to comments
- *    and make this code file completely yours. One thing I recommend is storing
- *    your SoundBox song URL in a comment so it doesn't get lost.
- *
- **/
+
 
 /*
 The visuals of this production are synced to the following song
@@ -144,11 +110,6 @@ function initAssets(){
      *   applying "f" and drawing "o". If you have been wondering what recursive
      *   processing means, then here is a good example about it.
      *
-     * All the lists f, o, and c must always exist (or there will be a runtime
-     * error and crash) but any can be empty, marked with empty braces []. An
-     * empty list just means that the particular processing step is not relevant
-     * for that node.
-     *
      * The current library version uses property "r" for special uses, but it is
      * not mandatory, and will be explained later, on a need-to-know basis.
      */
@@ -160,6 +121,8 @@ function initAssets(){
        0,   0,   0,  0  // control
     ];
 
+    var elbowRot = 0;
+
 function person(t){
 
 
@@ -169,58 +132,35 @@ function person(t){
         c: []
     };
 
-    /**
-     * An example of a 4x4 matrix that is used in the default shading model
-     * (currently the best one available; calendar looks a bit so-so whether new
-     * models are coming at Instanssi 2024 or must be left to later time):
-     *
-     * First row:  [ Ambient  R,G,B = base color in shadowed region,      (unused) ]
-     * Second row: [ Diffuse  R,G,B = diffuse reflectance in lit region,  (unused) ]
-     * Third row:  [ Specular R,G,B = specular 'shiny' reflectance,      shininess ]
-     * Fourth row: [ (unused), (unused), (unused), mesh brightness ]
-     * 
-     * I suppose shininess needs to be larger than 0. Unused ones can be anything,
-     * they are unfortunate noise for our 4k.
-     */
-
-
-    var pelvis = {f: [],
-        o: [new Material(clr), objBall],
-        c: [] };
-
-    
-
-    var spine = {
-            f : [],
-            o : [],
-            c : []
-        };
-    
-    var ligament = {
-        f : [],
-        o : [new Material(clr), objBall],
-        c : []
-    };
-
-    for(let i = 0; i < 3; i++){
-
-        ligament.f.push(translate_wi(0,i+1,0));
-        ligament.f.push(scale_wi(0.25));
-        spine.c.push(ligament);
-
-    }
-
     var sternum = {
-        f : [translate_wi(0,4,0)],
+        f : [scale_wi(0.2),translate_wi(0,4,0)],
         o : [new Material(clr), objBall],
         c : []
     };
 
     var leftShoulder = {
-        f: [translate_wi(1,0,0)],
+        f: [translate_wi(2,0,0)],
         o: [new Material(clr), objBall],
         c: []
     };
+
+    
+    elbowRot = 2*Math.sin(0.5*t) > 0.1 ? 2*Math.sin(0.5*t) : 0.1;
+
+    var elbow = {
+        f: [translate_wi(0,-3,0), rotX_wi(elbowRot)],
+        o: [new Material(clr), objBall],
+        c: []
+    };
+
+    var wrist = {
+        f : [translate_wi(0,-3, 0)],
+        o: [new Material(clr), objBall],
+        c: [] };
+
+
+    elbow.c.push(wrist);
+    leftShoulder.c.push(elbow);
 
     var rightShoulder = {
         f: [translate_wi(-1,0,0)],
@@ -230,43 +170,8 @@ function person(t){
 
     sternum.c.push(leftShoulder);
     sternum.c.push(rightShoulder);
-
-    spine.c.push(pelvis);
-    spine.c.push(sternum);
     
-
-    person.c.push(spine);
-
-
-
-    // You can use such pushing for example for pushing multiple nodes in a for-loop ...
-
-    // stuff.c.push({f: [translate_wi(0,0,0), scale_wi(.7)],
-    //               o: [new Material(clr), objBall],
-    //                     // right hand
-    //               c: [
-    //                   {f: [rotY_wi(.2), rotZ_wi(.4*Math.sin(.8*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
-    //                    o: [objBall],
-    //                    c: []},
-    //                   {f: [rotY_wi(-.2), rotX_wi(.4*Math.sin(.06*t)),rotZ_wi(3.14-.4*Math.sin(.1*t)), translate_wi(1,0,0), scaleXYZ_wi(.8,.3,.3)],
-    //                    o: [objBall],
-    //                    c: []}
-    //                  ]
-    //              });
-    
-    // stuff.c.push({f: [translate_wi(0,3,0), scale_wi(.4), rotX_wi(-.3)],
-    //               o: [new Material(clr), objBall],
-    //               c: [{f: [translate_wi(0,.5,0), scaleXYZ_wi(1.5,.2,1.5)],
-    //                    o: [new Material(black), objBall],
-    //                    c: []
-    //                   },
-    //                   {f: [translate_wi(0,.2,0), scaleXYZ_wi(.9,1,.9)],
-    //                    o: [new Material(black), objBall],
-    //                    c: []
-    //                   }
-    //                  ]
-    //              });
-
+    person.c.push(sternum);
 
     return person;
 }
@@ -321,7 +226,7 @@ function buildSceneAtTime(t){
                                c:[personnel]},
                                 
                               // The scene must have exactly one Camera. It doesn't work without.
-                              {f:[translate_wi(0,0,0), rotY_wi(0), translate_wi(0,0,45), rotX_wi(.2)],
+                              {f:[translate_wi(0,0,0), rotY_wi(t/3), translate_wi(0,0,45), rotX_wi(.2)],
                                o:[],
                                c:[],
                                r:[new Camera()]
