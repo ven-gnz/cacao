@@ -2483,6 +2483,15 @@ function initAssets(){
     ];
 
     var elbowRot = 0;
+    var shoulderRotZ = 0;
+    var minShoulderRot = 0;
+    var maxShoulderRot = 0.5;
+
+
+
+    function lerp(a,b,t){
+        return a + (b-a) * t;
+    }
 
 function person(t){
 
@@ -2498,18 +2507,23 @@ function person(t){
         o : [new Material(clr), objBall],
         c : []
     };
+    
+    var rot = Math.sin(0.5*t) < 0.5 ? Math.sin(0.5*t) : maxShoulderRot; // constrain
+    rot = Math.max(minShoulderRot, Math.min(rot, maxShoulderRot)); //clamp
+    shoulderRotZ = lerp(shoulderRotZ, rot, 0.05); //lerp
 
     var leftShoulder = {
-        f: [translate_wi(2,0,0)],
+        f: [translate_wi(2,0,0),rotZ_wi(shoulderRotZ)],
         o: [new Material(clr), objBall],
         c: []
     };
 
     
+    //only one degree of freedom
     elbowRot = 2*Math.sin(0.5*t) > 0.1 ? 2*Math.sin(0.5*t) : 0.1;
-
+    
     var elbow = {
-        f: [translate_wi(0,-3,0), rotX_wi(elbowRot)],
+        f: [translate_wi(0,-3,0), rotX_wi(elbowRot)], 
         o: [new Material(clr), objBall],
         c: []
     };
